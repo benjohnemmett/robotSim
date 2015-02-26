@@ -77,18 +77,18 @@ class robot(object):
                 if(self.world.map[round(ty)][round(tx)] == 0):      #Check if sim robot hit something
                     self.x = tx
                     self.y = ty
-                else:
+                #else:
                     #print "Bonk! You hit something."
             #else:
                 #print "Oops! You tried to go off the map!"
-                
+
         tx = self.x + dx*residualStepSize
         ty = self.y + dy*residualStepSize
         if((tx >= 0) & (tx <= eowx) & (ty >= 0) & (ty <= eowy)): #Check if sim robot went off the sim map
             if(self.world.map[round(ty)][round(tx)] == 0):      #Check if sim robot hit something
                 self.x = tx
                 self.y = ty
-            else:
+            #else:
                 #print "Bonk! You hit something."
         #else:
            # print "Oops! You tried to go off the map!"

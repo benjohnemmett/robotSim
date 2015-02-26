@@ -3,6 +3,7 @@ import world as w
 import robot as r
 import ai 
 import matplotlib.pyplot as plt
+import time
 
 newWorld = w.world(0,0)
 newRobot = r.robot(newWorld,2,2,0)
@@ -12,7 +13,7 @@ print newAI.map
 
 plt.imshow(newRobot.whereAmI(),interpolation='nearest')
 plt.figure(num=1)
-pause(0.1)
+time.sleep(0.1)
 raw_input("+")
 
 
@@ -26,7 +27,7 @@ print newRobot
 
 plt.imshow(newRobot.whereAmI(),interpolation='nearest')
 plt.show()
-pause(0.1)
+time.sleep(0.1)
 raw_input("+")
 
 print newRobot.sense()
@@ -35,7 +36,7 @@ print newRobot
 
 plt.imshow(newRobot.whereAmI(),interpolation='nearest')
 plt.show()
-pause(0.1)
+time.sleep(0.1)
 raw_input("+")
 
 print newRobot.sense()
@@ -44,7 +45,7 @@ print newRobot
 
 plt.imshow(newRobot.whereAmI(),interpolation='nearest')
 plt.show()
-pause(0.1)
+time.sleep(0.1)
 raw_input("+")
 
 print newRobot.sense()
