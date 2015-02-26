@@ -1,2 +1,2 @@
 # robotSim
-Simulation for an intelligent robot
+Python simulation for an intelligent robot.
