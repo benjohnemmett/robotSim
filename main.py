@@ -10,7 +10,10 @@ newRobot = r.robot(newWorld,2,2,0)
 newAI    = ai.ai(newRobot)
 
 print newAI.map
+print newAI.sense()
 
+
+"""
 plt.imshow(newRobot.whereAmI(),interpolation='nearest')
 plt.figure(num=1)
 time.sleep(0.1)
@@ -51,4 +54,4 @@ raw_input("+")
 print newRobot.sense()
 
 plt.close()
-
+"""

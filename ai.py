@@ -6,13 +6,17 @@ Created on Mon Feb 23 22:17:58 2015
 """
 import robot
 import numpy as np
+import math
 
 class ai(object):
     
     def __init__(self,robot):
         
         self.robot = robot #This is the simulated robot that this ai algorithm lives inside
-        self.map = np.array([[4]])
+        self.map = np.array([[0,0,0,0,0],[0,0,0,0,0],[0,0,4,0,0],[0,0,0,0,0],[0,0,0,0,0]])
+        self.x = 2
+        self.y = 2
+        self.o = 0
         
 # Robot control functions
     def sense(self):
@@ -23,6 +27,18 @@ class ai(object):
         
     def turn(self,o):
         return self.robot.turn(o)
+    
+    def senseAndUpdateMap(self):
+        d = self.sense();
+        
+        #Break down into X and Y components
+        dx = d*math.cos(self.o)
+        dy = d*math.sin(self.o)
+        
+        #Check to see if map is large enough
+        
+        
+        
         
 # Robot AI functions
 #   def navigateToGoal(self, goal): # Plan and follow a route to reach the goal
