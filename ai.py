@@ -7,16 +7,17 @@ Created on Mon Feb 23 22:17:58 2015
 import robot
 import numpy as np
 import math
+import map
 
 class ai(object):
     
     def __init__(self,robot):
         
         self.robot = robot #This is the simulated robot that this ai algorithm lives inside
-        self.map = np.array([[0,0,0,0,0],[0,0,0,0,0],[0,0,4,0,0],[0,0,0,0,0],[0,0,0,0,0]])
-        self.x = 2
-        self.y = 2
-        self.o = 0
+        self.map = map.map(5,5,2.5,2.5)
+        self.x = 0.0
+        self.y = 0.0
+        self.o = 0.0
         
 # Robot control functions
     def sense(self):
@@ -35,7 +36,6 @@ class ai(object):
         dx = d*math.cos(self.o)
         dy = d*math.sin(self.o)
         
-        #Check to see if map is large enough
         
         
         
