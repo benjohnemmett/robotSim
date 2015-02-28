@@ -10,8 +10,16 @@ newRobot = r.robot(newWorld,2,2,0)
 newAI    = ai.ai(newRobot)
 
 print newAI.map
-print newAI.sense()
+newAI.senseAndUpdateMap()
 
+print newAI.map
+
+for i in range(36):
+    newAI.turn((2*pi)/36)
+    newAI.senseAndUpdateMap()
+
+newAI.printMap()
+print newRobot.whereAmI()
 
 """
 plt.imshow(newRobot.whereAmI(),interpolation='nearest')
