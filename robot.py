@@ -3,10 +3,11 @@ Truth Model for a simple crawling robot
 '''
 
 import numpy as np
-import world as w
 import math
 
 class robot(object):
+    
+    
     
     def __init__(self,world,sx,sy,sO):
         
@@ -98,10 +99,11 @@ class robot(object):
     def turn(self,do):
         if(do > 2*math.pi):
             print "Warning turn angle greater than 2pi given!"
-        o = self.o
-        to = o + do
-        self.o = to % (2*math.pi)
-        measured = (o - self.o) % (2*math.pi)
+        o = self.o      # Get original orientation
+        to = o + do     # Add new turn command offset
+        self.o = to % (2*math.pi) # Set new Orientation 
+        measured = do   # Get meaurement from IMU which will be sent to AI
+        #print "Turn start: "+ str(o) + " end: " + str(self.o) + " do: " + str(do) + " measured: " + str(measured)
         return measured
         
     def sense(self):
