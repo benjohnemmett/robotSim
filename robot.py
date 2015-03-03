@@ -4,9 +4,9 @@ Truth Model for a simple crawling robot
 
 import numpy as np
 import math
+import random
 
 class robot(object):
-    
     
     
     def __init__(self,world,sx,sy,sO):
@@ -38,12 +38,6 @@ class robot(object):
         m = np.copy(self.world.map)
         m[round(self.y)][round(self.x)] = 4
         return str(m) + " radians"
-#    
-#    def show(self):
-#        m = np.copy(self.world.map)
-#        m[round(self.y)][round(self.x)] = 4
-#        print m
-#        print str(self.o) + " radians"
         
     def whereAmI(self):
         m = np.copy(self.world.map)
@@ -53,11 +47,13 @@ class robot(object):
 # Commands which will be given to the Arduino Controller
 
     def drive(self,distance):
+        
+        driveStep = 0.1
+        driveProcessSigma = 0.01
+        driveMeasureSigma = 1.0
+        
         #Assuming small increments of motion (<=1)
-        # To Do
-        #   - Break down into loop of small motion steps 
-        #   - Add noise to measurement
-        #   - Add process noise as well
+        
         xOrig = self.x
         yOrig = self.y
         
@@ -72,8 +68,8 @@ class robot(object):
         
         for i in range(numSteps):
                         
-            tx = self.x + dx*stepSize
-            ty = self.y + dy*stepSize
+            tx = self.x + dx*(driveStep + random.gauss(0,driveProcessSigma))
+            ty = self.y + dy*(driveStep + random.gauss(0,driveProcessSigma))
             if((tx >= 0) & (tx <= eowx) & (ty >= 0) & (ty <= eowy)): #Check if sim robot went off the sim map
                 if(self.world.map[round(ty)][round(tx)] == 0):      #Check if sim robot hit something
                     self.x = tx
@@ -94,22 +90,25 @@ class robot(object):
         #else:
            # print "Oops! You tried to go off the map!"
                 
-        return math.sqrt((self.x-xOrig)**2 + (self.y-yOrig)**2)
+        return (math.sqrt((self.x-xOrig)**2 + (self.y-yOrig)**2) + random.gauss(0,driveMeasureSigma))
             
     def turn(self,do):
+        turnProcessSigma = 0.01
+        turnMeasureSigma = 0.01        
+        
         if(do > 2*math.pi):
             print "Warning turn angle greater than 2pi given!"
         o = self.o      # Get original orientation
-        to = o + do     # Add new turn command offset
+        to = o + do + random.gauss(0,turnProcessSigma)     # Add new turn command offset
         self.o = to % (2*math.pi) # Set new Orientation 
-        measured = do   # Get meaurement from IMU which will be sent to AI
+        measured = ((to - o) + random.gauss(0,turnMeasureSigma)) % (2*math.pi)    # Get meaurement from IMU which will be sent to AI
         #print "Turn start: "+ str(o) + " end: " + str(self.o) + " do: " + str(do) + " measured: " + str(measured)
         return measured
         
     def sense(self):
-        #To Do
-        #   - Add measurement noise
+        senseRangeSigma = 1.0
         stepSize = 0.2
+        
         tx = self.x
         ty = self.y 
         
@@ -119,6 +118,6 @@ class robot(object):
             tx += stepSize*math.cos(self.o)
             ty += stepSize*math.sin(self.o)
             
-        d = math.sqrt((tx - self.x)**2 + (ty-self.y)**2)
+        d = math.sqrt((tx - self.x)**2 + (ty-self.y)**2) + random.gauss(0,senseRangeSigma)
         return d
         

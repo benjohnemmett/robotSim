@@ -4,6 +4,7 @@ import robot as r
 import ai 
 import matplotlib.pyplot as plt
 import time
+import math
 
 newWorld = w.world(0,0)
 newRobot = r.robot(newWorld,10,10,0)
@@ -14,16 +15,12 @@ newAI.senseAndUpdateMap()
 
 print newAI.map
 
-step = 100
-
-for i in range(100):
-    newAI.turn((2*pi)/100)
-    newAI.senseAndUpdateMap()
+newAI.spinAndScan()
 
 newAI.printMap()
 print newRobot.whereAmI()
 
-print "Turning " + str(newAI.turn(0.75))
+print "Turning " + str(newAI.turn(2.0))
 print "Moving " + str(newAI.drive(4.5))
 
 newAI.printMap()

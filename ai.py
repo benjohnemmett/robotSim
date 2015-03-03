@@ -6,14 +6,16 @@ Created on Mon Feb 23 22:17:58 2015
 """
 import numpy as np
 import math
-import aiMap
+import statMap
 
 class ai(object):
+    
+    traceStepSize = 0.25
     
     def __init__(self,robot):
         
         self.robot = robot #This is the simulated robot that this ai algorithm lives inside
-        self.map = aiMap.aiMap(5,5,2.5,2.5)
+        self.map = statMap.statMap(5,5,2.5,2.5)
         self.x = 0.0
         self.y = 0.0
         self.o = 0.0
@@ -23,52 +25,70 @@ class ai(object):
         return self.robot.sense()
         
     def drive(self,distance):
+        # Command Robot to drive requested distance
         d = self.robot.drive(distance)
 
+        # Update estimated position
         self.x += d*math.cos(self.o)
         self.y += d*math.sin(self.o)        
         
         return d
         
     def turn(self,o):
+        # Command Robot to turn requested anglular amount
         o = self.robot.turn(o)
+        
+        # Update orientation estimate
         self.o = (self.o + o) % (2*math.pi)
+        
         return o
     
     def senseAndUpdateMap(self):
-        d = self.sense();
-        #print "Sensed echo " + str(d) + " away."
+        traceStepSize = 0.25
         
-        # Break down into X and Y components
-        dx = d*math.cos(self.o)
-        dy = d*math.sin(self.o)
-                
-        # Calculate predicted location of echo
-        sx = self.x + dx
-        sy = self.y + dy        
+        # Command Robot to sense distance to nearest echo source
+        E = self.sense();
         
-        #print "Sensed echo " + str(d) +" away (" + str(sx) + "," + str(sy)
-        #print "\tEstimated location " + str(sy) + "," + str(sx) 
+        # Break distance down into X and Y components
+        dx = math.cos(self.o)
+        dy = math.sin(self.o)
         
+        # Calculate predicted location of echo source
+        Ex = self.x + dx*E
+        Ey = self.y + dy*E
         
-        #To Do: Account for sensor noise by creating a map of probabilities of echo sources
-        #       Let there be a probabilistic distribution around the estimated echo source location
-        #       which becomes negative as it approaches the Robot.
-        #       
-        #       This may be a 2 part algorithm. First convolve the prior probabilities with those of the new measurement, then penalize probabilities closer to the robot. 
-        #
-        #
-        #       p=0.80                          __   
-        #                                      /  \
-        # Robot p=0.0                        /     \__________________
-        #                                  /         
-        #       p=-0.1  _________________/     
-        #  ^
-        #  | probablity of echo source : distance from Robot -> 
-        #
+        # Find Row & Column on map of estimated echo source location
+        ERow = round(Ey)
+        ECol = round(Ex)
+        # Increase probability of echo source at location estimate
+        self.map.bumpUp(ERow,ECol)
         
-        self.map.setValue(sy,sx,1)
+        tx = self.x + traceStepSize*dx
+        ty = self.y + traceStepSize*dy
         
+        # Decriment probability of echo source between Robot and estimated echo source location
+        while (round(ty) != ERow) & (round(tx) != ECol): # Stop decrimenting when you get to the Echo Source location
+            
+            tRow = round(ty)
+            tCol = round(tx)
+
+            self.map.knockDown(tRow,tCol)            
+            
+            tx += traceStepSize*dx
+            ty += traceStepSize*dy
+            
+        return E
+
+    def spinAndScan(self):
+        # Take measurements while incrementally spinning in place to map out local area.
+        oTotal = 0       
+        
+        while(oTotal < 2*math.pi):
+            distance = self.senseAndUpdateMap()        
+            nextTurn = 0.3/distance
+            self.turn(nextTurn)
+            oTotal += nextTurn
+
     def printMap(self):
         tmp = self.map.mapWithMarker(self.y,self.x,4)
         print tmp
