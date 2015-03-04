@@ -7,24 +7,20 @@ import time
 import math
 
 newWorld = w.world(0,0)
-newRobot = r.robot(newWorld,10,10,0)
+newRobot = r.robot(newWorld,3,4,0)
 newAI    = ai.ai(newRobot)
 
-print newAI.map
-newAI.senseAndUpdateMap()
+newAI.senseAndUpdateMap360()
 
-print newAI.map
-
-newAI.spinAndScan()
-
-newAI.printMap()
-print newRobot.whereAmI()
-
-print "Turning " + str(newAI.turn(2.0))
-print "Moving " + str(newAI.drive(4.5))
+plt.imshow(newAI.map.mapArray,interpolation='nearest')
+plt.colorbar()
+plt.show()
 
 newAI.printMap()
 print newRobot.whereAmI()
+
+newAI.navigateToGoal(5,1)
+
 
 """
 plt.imshow(newRobot.whereAmI(),interpolation='nearest')

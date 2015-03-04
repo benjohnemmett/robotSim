@@ -79,7 +79,7 @@ class ai(object):
             
         return E
 
-    def spinAndScan(self):
+    def senseAndUpdateMap360(self):
         # Take measurements while incrementally spinning in place to map out local area.
         oTotal = 0       
         
@@ -92,6 +92,11 @@ class ai(object):
     def printMap(self):
         tmp = self.map.mapWithMarker(self.y,self.x,4)
         print tmp
+        
+    def navigateToGoal(self,row,col):
+        grad = self.map.gradientMapToGoal(row,col)
+        print grad.astype(int)
+        
         
         
         

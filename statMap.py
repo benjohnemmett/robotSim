@@ -121,3 +121,36 @@ class statMap(object):
         
         return tmp
         
+    def gradientMapToGoal(self,row,col):
+        navThresh = 0.5
+        d = [[0,1],[-1,0],[0,-1],[1,0]]        
+        
+        r = math.floor(row + self.rOrig) #Convert to array indecies
+        c = math.floor(col + self.cOrig)
+        
+        grad = np.zeros_like(self.mapArray)
+        mapRows, mapCols = np.shape(grad)
+        
+        openList = [(r,c)]
+        
+        while (len(openList) > 0):
+            maxCost = 999
+            r0,c0 = openList.pop(0)
+            cost = grad[r0][c0]
+            
+            for i in range(len(d)):
+                rt = r0 + d[i][0]
+                ct = c0 + d[i][1]
+                
+                if((rt >= 0) & (rt < (mapRows-1)) & (ct >= 0) & (ct < (mapCols-1)) & (grad[rt][ct] == 0) & ((rt != r) | (ct != c))): #On the map
+                    if(self.mapArray[rt][ct] < navThresh): # Navigable
+                        grad[rt][ct] = cost + 1
+                        openList.append((rt,ct))
+                    else:
+                        grad[rt][ct] = maxCost # Max cost means that this space is not navigable
+        return grad
+            
+            
+        
+        
+        
