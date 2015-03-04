@@ -149,6 +149,15 @@ class statMap(object):
                     else:
                         grad[rt][ct] = maxCost # Max cost means that this space is not navigable
         return grad
+    
+    def planRouteToGoal(self,startRow, startCol, endRow, endCol):
+        sr = math.floor(startRow + self.rOrig) #Convert to array indecies
+        sc = math.floor(startCol + self.cOrig)
+        
+        grad = self.gradientMapToGoal(startRow, startCol)
+        
+        
+        
             
             
         
