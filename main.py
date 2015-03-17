@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import time
 import math
 
-newWorld = w.world(0,0)
+newWorld = w.world(0,0,1)
 newRobot = r.robot(newWorld,3,4,0)
 newAI    = ai.ai(newRobot)
 
@@ -19,7 +19,7 @@ plt.show()
 newAI.printMap()
 print newRobot.whereAmI()
 
-newAI.navigateToGoal(5,1)
+newAI.navigateToGoal(2,6)
 
 
 """

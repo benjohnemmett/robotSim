@@ -50,7 +50,7 @@ class robot(object):
         
         driveStep = 0.1
         driveProcessSigma = 0.01
-        driveMeasureSigma = 1.0
+        driveMeasureSigma = 0.6
         
         #Assuming small increments of motion (<=1)
         
@@ -106,7 +106,7 @@ class robot(object):
         return measured
         
     def sense(self):
-        senseRangeSigma = 1.0
+        senseRangeSigma = 0.5
         stepSize = 0.2
         
         tx = self.x

@@ -15,7 +15,7 @@ class ai(object):
     def __init__(self,robot):
         
         self.robot = robot #This is the simulated robot that this ai algorithm lives inside
-        self.map = statMap.statMap(5,5,2.5,2.5)
+        self.map = statMap.statMap(5,5,2,2)
         self.x = 0.0
         self.y = 0.0
         self.o = 0.0
@@ -93,9 +93,11 @@ class ai(object):
         tmp = self.map.mapWithMarker(self.y,self.x,4)
         print tmp
         
-    def navigateToGoal(self,row,col):
-        grad = self.map.gradientMapToGoal(row,col)
+    def navigateToGoal(self,x,y):
+        grad = self.map.gradientMapToGoal(y,x)
         print grad.astype(int)
+        waypoints = self.map.planRouteToGoal(self.y,self.x,y,x)
+        print waypoints
         
         
         
