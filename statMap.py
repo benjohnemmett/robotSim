@@ -58,7 +58,7 @@ class statMap(object):
         
         self.mapArray[r][c] = val + (1-val)*prior
 
-    def knockDown(self,row,col,val=0.5):
+    def knockDown(self,row,col,val=0.9):
         r = round(row + self.rOrig)
         c = round(col + self.cOrig)
         

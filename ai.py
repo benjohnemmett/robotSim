@@ -44,7 +44,7 @@ class ai(object):
         return o
     
     def senseAndUpdateMap(self):
-        traceStepSize = 0.25
+        traceStepSize = 0.33
         
         # Command Robot to sense distance to nearest echo source
         E = self.sense();
@@ -67,7 +67,7 @@ class ai(object):
         ty = self.y + traceStepSize*dy
         
         # Decriment probability of echo source between Robot and estimated echo source location
-        while (round(ty) != ERow) & (round(tx) != ECol): # Stop decrimenting when you get to the Echo Source location
+        while (round(ty) != ERow) | (round(tx) != ECol): # Stop decrimenting when you get to the Echo Source location
             
             tRow = round(ty)
             tCol = round(tx)
@@ -88,6 +88,9 @@ class ai(object):
             nextTurn = 0.3/distance
             self.turn(nextTurn)
             oTotal += nextTurn
+            
+    def getMap(self):
+        return self.map.mapWithMarker(self.y,self.x,4)
 
     def printMap(self):
         tmp = self.map.mapWithMarker(self.y,self.x,4)
@@ -99,7 +102,17 @@ class ai(object):
         waypoints = self.map.planRouteToGoal(self.y,self.x,y,x)
         print waypoints
         
+    def goToWayPoint(self,wp):
+        o = math.atan2((wp[0]-self.y),(wp[1]-self.x)) 
+        print 'Turn to ' + str(o * 180/math.pi) + ' deg'
+        self.turnToHeading(o)
         
+    def turnToHeading(self,o):
+        theta_ = o - self.o
+        theta_pi = theta_ + math.pi
+        theta = (theta_pi %(2*math.pi)) - math.pi
+        
+        return self.turn(theta)
         
         
 # Robot AI functions
