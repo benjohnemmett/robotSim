@@ -10,7 +10,7 @@ import robot as r
 import ai
 import numpy as np
 
-print 'Unit Test 1'
+print '\nBegin Unit Test 1\n'
 # This is a noiseless test to show that the senseAndUpdateMap() function is working properly
 # First, the robot senses the distance to the wall directly right of himself twice to get a good confidence,
 # Then an obstical is placed between the robot and the wall, two more readings are taken.
@@ -49,7 +49,9 @@ for i in range(2):
     if(printFlag):
         print newAI.map
 
+print ' - AI map'
 newAI.printMap()
+print ' - Truth Map'
 print newRobot.whereAmI()
 
 actualMap = newAI.map.mapArray
@@ -62,3 +64,20 @@ else:
     print expectedMap
     print 'Actual Map'
     print newAI.map.mapArray
+    
+    
+print '\nBegin Unit Test 2a\n'
+newAI.navigateToGoal(0,1.0)
+
+print ' - AI map'
+newAI.printMap()
+print ' - Truth Map'
+print newRobot.whereAmI()
+    
+print '\nBegin Unit Test 2b\n'
+newAI.navigateToGoal(2.5,1.0)
+
+print ' - AI map'
+newAI.printMap()
+print ' - Truth Map'
+print newRobot.whereAmI()

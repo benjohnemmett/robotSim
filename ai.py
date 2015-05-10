@@ -96,17 +96,58 @@ class ai(object):
         tmp = self.map.mapWithMarker(self.y,self.x,4)
         print tmp
         
+        
+    # NAVIGATE TO GOAL #
+        
+        # Determine appropriate route to specified goal and drive to it
+        #
+        #   inputs:
+        #       x - X coordinate of goal in Robot Coordinates
+        #       y - Y coordinate of goal in Robot Coordinates
+        #
+        #   outputs:
+        #
+        #
     def navigateToGoal(self,x,y):
         grad = self.map.gradientMapToGoal(y,x)
         print grad.astype(int)
-        waypoints = self.map.planRouteToGoal(self.y,self.x,y,x)
+        waypoints = self.map.planRouteToGoal(self.y,self.x,y,x) #Are these in world coordinates or robot relative...?
         print waypoints
+        for i in range(len(waypoints)):
+            self.goToWaypoint(waypoints[i])
+            self.printMap() 
+            
+            
+     # GO TO WAYPOINT #
         
-    def goToWayPoint(self,wp):
-        o = math.atan2((wp[0]-self.y),(wp[1]-self.x)) 
+        # Turn and drive in a straight line to specified waypoint.
+        #
+        #   inputs:
+        #       wp - tuple containing the x,y pair which defines the waypoint in robot coordinates.
+        #
+        #   outputs:
+        #
+        #
+    def goToWaypoint(self,wp):
+        dy = (wp[0]-self.y)
+        dx = (wp[1]-self.x)
+        
+        o = math.atan2(dy,dx)
+        d = math.sqrt(dy**2 + dx**2)
         print 'Turn to ' + str(o * 180/math.pi) + ' deg'
         self.turnToHeading(o)
+        self.drive(d)
         
+    # Turn to Heading #
+        
+        # Turn toward a specified point in robot coordinates.
+        #
+        #   inputs:
+        #       o - Desired heading in robot coordinates.
+        #
+        #   outputs:
+        #
+        #
     def turnToHeading(self,o):
         theta_ = o - self.o
         theta_pi = theta_ + math.pi

@@ -129,7 +129,7 @@ class statMap(object):
         r = round(row + self.rOrig) #Convert to array indecies
         c = round(col + self.cOrig)
         
-        grad = np.zeros_like(self.mapArray)
+        grad = np.zeros_like(self.mapArray,dtype=np.int)
         mapRows, mapCols = np.shape(grad)
         
         openList = [(r,c)]
@@ -143,12 +143,13 @@ class statMap(object):
                 rt = r0 + d[i][0]
                 ct = c0 + d[i][1]
                 
-                if((rt >= 0) & (rt < (mapRows-1)) & (ct >= 0) & (ct < (mapCols-1)) & (grad[rt][ct] == 0) & ((rt != r) | (ct != c))): #On the map
-                    if(self.mapArray[rt][ct] < navThresh): # Navigable
-                        grad[rt][ct] = cost + 1
-                        openList.append((rt,ct))
-                    else:
-                        grad[rt][ct] = maxCost # Max cost means that this space is not navigable
+                if((rt >= 0) & (rt <= (mapRows-1)) & (ct >= 0) & (ct <= (mapCols-1))): #On the map
+                    if(grad[rt][ct] == 0) & ((rt != r) | (ct != c)): #Not set yet
+                        if(self.mapArray[rt][ct] < navThresh): # Navigable
+                            grad[rt][ct] = cost + 1
+                            openList.append((rt,ct))
+                        else:
+                            grad[rt][ct] = maxCost # Max cost means that this space is not navigable
         return grad
     
     def planRouteToGoal(self,startY, startX, endY, endX):
@@ -157,6 +158,9 @@ class statMap(object):
         er = round(endY + self.rOrig)
         ec = round(endX + self.cOrig)
         
+        ###########################
+        ### !!!! This appears to have a bug where it does not completely fill in the map, leaving some areas zeros where it should not be
+        ############################
         grad = self.gradientMapToGoal(endY, endX)
         
         #Create a list of waypoints leading to the goal
@@ -181,7 +185,7 @@ class statMap(object):
             cr = nextRow
             cc = nextCol
             
-        waypoints.append((endY,endX))
+        #waypoints.append((endY,endX))
         return waypoints
                     
             
