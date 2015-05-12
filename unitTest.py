@@ -9,6 +9,7 @@ import world as w
 import robot as r
 import ai
 import numpy as np
+import math
 
 print '\nBegin Unit Test 1\n'
 # This is a noiseless test to show that the senseAndUpdateMap() function is working properly
@@ -65,7 +66,7 @@ else:
     print 'Actual Map'
     print newAI.map.mapArray
     
-    
+# Test Navigate to Goal x only
 print '\nBegin Unit Test 2a\n'
 newAI.navigateToGoal(0,1.0)
 
@@ -74,8 +75,47 @@ newAI.printMap()
 print ' - Truth Map'
 print newRobot.whereAmI()
     
+# Test Navigate to Goal y only
 print '\nBegin Unit Test 2b\n'
 newAI.navigateToGoal(2.5,1.0)
+
+print ' - AI map'
+newAI.printMap()
+print ' - Truth Map'
+print newRobot.whereAmI()
+    
+    
+# Test Navigate to Goal x & y both
+print '\nBegin Unit Test 2c\n'
+newAI.navigateToGoal(-1,-1)
+
+print ' - AI map'
+newAI.printMap()
+print ' - Truth Map'
+print newRobot.whereAmI()
+    
+    
+# Test Navigate to Goal off map
+print '\nBegin Unit Test 2d\n'
+newAI.navigateToGoal(2,4)
+
+print ' - AI map'
+newAI.printMap()
+print ' - Truth Map'
+print newRobot.whereAmI()
+
+
+# Test Navigate to Goal around obstacle
+newWorld.map[7][5] = 1 
+print '\nBegin Unit Test 2e\n'
+newAI.turnToHeading(math.pi*(3.0/2.0))
+newAI.senseAndUpdateMap()
+print ' - AI map'
+newAI.printMap()
+print ' - Truth Map'
+print newRobot.whereAmI()
+
+newAI.navigateToGoal(2,0)
 
 print ' - AI map'
 newAI.printMap()

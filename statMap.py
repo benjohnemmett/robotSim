@@ -126,11 +126,27 @@ class statMap(object):
         navThresh = 0.5
         d = [[0,1],[-1,0],[0,-1],[1,0]]        
         
+        mapRows, mapCols = np.shape(self.mapArray)
         r = round(row + self.rOrig) #Convert to array indecies
         c = round(col + self.cOrig)
         
+        #Expand Map if necessary
+        if(r < 0):
+            #print "r < 0"
+            self.expandMap(-r,0,0,0)
+        if(r >= mapRows):
+            #print "r >= mapRows"
+            self.expandMap(0,(r-mapRows + 1),0,0)
+        if(c < 0):
+            #print "c < 0"
+            self.expandMap(0,0,-c,0)
+        if(c >= mapCols):
+            #print "c >= mapCols"
+            self.expandMap(0,0,0,(c-mapCols + 1))
+            
+        mapRows, mapCols = np.shape(self.mapArray)
+        
         grad = np.zeros_like(self.mapArray,dtype=np.int)
-        mapRows, mapCols = np.shape(grad)
         
         openList = [(r,c)]
         
@@ -161,7 +177,8 @@ class statMap(object):
         ###########################
         ### !!!! This appears to have a bug where it does not completely fill in the map, leaving some areas zeros where it should not be
         ############################
-        grad = self.gradientMapToGoal(endY, endX)
+        grad = self.gradientMapToGoal(endY, endX)        
+        mapRows, mapCols = np.shape(grad)
         
         #Create a list of waypoints leading to the goal
         dList = [[0,1],[0,-1],[1,0],[-1,0]]
@@ -177,10 +194,11 @@ class statMap(object):
             for i in range(len(dList)):
                 dr = dList[i][0]
                 dc = dList[i][1]
-                if(grad[cr+dr][cc+dc] < cost):
-                   nextRow = cr + dr
-                   nextCol = cc + dc
-                   cost = grad[cr+dr][cc+dc]
+                if(((cr+dr) >= 0) & ((cr+dr) < mapRows) & ((cc+dc) >= 0) & ((cc+dc) < mapCols)):
+                    if(grad[cr+dr][cc+dc] < cost):
+                       nextRow = cr + dr
+                       nextCol = cc + dc
+                       cost = grad[cr+dr][cc+dc]
             waypoints.append((round(nextRow - self.rOrig), round(nextCol - self.cOrig))) # This coordinate transform is not correct going from map back to robot coordinates
             cr = nextRow
             cc = nextCol
